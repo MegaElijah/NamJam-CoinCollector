@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>
+Coin Collector (Development Build)
+</title>
+</head>
+<body>
+<img style="display: none;" src= "Clown.png" id="playerOneWin">
+<img style="display: none;" src= "Laughing.png" id="playerTwoWin">
+<h1>
+Coin Collector ( Development Build )
+</h1>
+<canvas id= "canvas" width="200" height="200">
+</canvas>
+<p id="score" style="border: 1px solid black; width: 200px">
+</p>
+<p>
+Objective is to collect 10 coins before your opponent.
+</p>
+<p>
+Player 1 Controls: Arrow Keys 
+</p>
+<p>
+Player 2 Controls: WASD
+</p>
+<p>
+Player 1 is Black
+</p>
+<p>
+Player 2 is Blue
+</p>
+<p>
+The coin is yellow
+</p>
+
+
+
+
+<script>
+
+const WIN_CONDITION = 10;
+
+var canvas= document.getElementById("canvas");
+var context= canvas.getContext("2d");
+var playerOne= {x:0 , y:0, earnings:0}
+var coin= {x:10 , y:10}
+var playerTwo= {x:19 , y:19, earnings:0}
+
+drawGame();
+  
+document.addEventListener("keydown",onkeydown);
+displayScore();
+
+function onkeydown(evt) {
+ updatePlayerOnePosition (evt);
+ updatePlayerTwoPosition (evt);
+ 
+  var playerOneCollectedCoin = collectCoin(playerOne,coin);
+  var playerTwoCollectedCoin = collectCoin(playerTwo,coin);
+  
+  if (playerOneCollectedCoin) {
+    playerOne.earnings=playerOne.earnings+1;
+  }
+  
+  if (playerTwoCollectedCoin) {
+    playerTwo.earnings=playerTwo.earnings+1;
+  }
+  
+  if (playerOneCollectedCoin==true || playerTwoCollectedCoin==true) {
+    coin.x=Math.random()*19;
+    coin.x=Math.ceil(coin.x)
+    coin.y=Math.random()*19;
+    coin.y=Math.ceil(coin.y)
+    console.log(playerOne.earnings, playerTwo.earnings)
+    displayScore();  
+  }
+
+  if (playerOne.earnings == WIN_CONDITION || playerTwo.earnings== WIN_CONDITION) {
+    coin.x=20
+    coin.y=20
+  }
+  
+  drawGame();
+  
+}
+
+function displayScore() {
+  var scoreElement = document.getElementById("score");
+  if (playerOne.earnings == WIN_CONDITION) {
+	scoreElement.innerHTML = "PLAYER ONE WON";
+  } else if (playerTwo.earnings== WIN_CONDITION) {
+	scoreElement.innerHTML = "PLAYER TWO WON";
+  } else {
+	scoreElement.innerHTML = `Player 1: ${playerOne.earnings} <br> Player 2: ${playerTwo.earnings}`
+  }
+  
+}
+
+function updatePlayerOnePosition (evt) {
+ if (evt.key == "ArrowRight" && playerOne.x<19) {
+     playerOne. x=playerOne. x+1;
+  }
+  if (evt.key == "ArrowDown"  && playerOne.y<19) {
+     playerOne. y=playerOne.y+1;
+  }
+  if (evt.key == "ArrowUp"    && playerOne.y>0) {
+     playerOne. y=playerOne.y-1;
+  }
+  if (evt.key == "ArrowLeft"  && playerOne.x>0) {
+     playerOne. x=playerOne.x-1;
+  }
+}
+
+function updatePlayerTwoPosition (evt) {
+ if (evt.key == "d" && playerTwo.x<19) {
+     playerTwo. x=playerTwo. x+1;
+  }
+  if (evt.key == "s"  && playerTwo.y<19) {
+     playerTwo. y=playerTwo.y+1;
+  }
+  if (evt.key == "w"    && playerTwo.y>0) {
+     playerTwo. y=playerTwo.y-1;
+  }
+  if (evt.key == "a"  && playerTwo.x>0) {
+     playerTwo. x=playerTwo.x-1;
+  }
+}
+
+function drawGame() {
+ clearCanvas();
+ drawCoin(coin.x , coin.y);
+ drawPlayerOne(playerOne.x , playerOne.y);
+ drawPlayerTwo(playerTwo.x , playerTwo.y);
+
+ if (playerOne.earnings == WIN_CONDITION) {
+   var winImage=document. getElementById("playerOneWin")
+   context.drawImage(winImage, 0,0,200,200);
+ }
+
+  if (playerTwo.earnings == WIN_CONDITION) {
+    var winImage=document. getElementById("playerTwoWin")
+    context.drawImage(winImage, 0,0,200,200);
+   }
+}
+
+function collectCoin(playerOne,coin){
+  if (playerOne.x==coin.x){
+	if (playerOne.y==coin.y){
+		return true;
+	}
+  } 
+  
+  return false;
+}
+
+function drawCoin(x,y){
+  context.fillStyle= "rgb(255,255,0)";
+  context.fillRect(10*x,10*y,10,10);
+}
+
+function clearCanvas(){ 
+  context.fillStyle= "rgb(200,0,0)";
+  context.fillRect(0,0,200,200);
+}
+
+function drawPlayerOne(x,y){
+  context.fillStyle= "rgb(0,0,0)";
+  context.fillRect(10*x,10*y,10,10);
+}
+function drawPlayerTwo(x,y){
+  context.fillStyle= "rgb(0,0,255)";
+  context.fillRect(10*x,10*y,10,10);
+}
+
+
+</script>
+
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
